@@ -11,17 +11,7 @@ public class Instinct {
     public void decide(LinkedList<Human>humen,Dino dino,Integer time,Integer timeNach){
         //инструменты
         float r=Float.MAX_VALUE;
-        Human humanCel=new Human(0,0) {
-            @Override
-            void sit() {
-
-            }
-
-            @Override
-            void decide() {
-
-            }
-        };
+        Human humanCel=new Human(0, 0, new PlayerIntellect(),new Rifle());
         for(Human human:humen){
             if(human.sost!=Sost.DEAD){
                 humanCel=human;
@@ -30,6 +20,7 @@ public class Instinct {
         }
         //решаем,что делать
         for(Human human:humen){
+            if(human.sost==Sost.DEAD)continue;
             float r1=(human.x-dino.x)*(human.x-dino.x)+(human.y-dino.y)*(human.y-dino.y);
             if(r1<=dino.rEating*dino.rEating){
                 if(dino.sost!=Sost.EATING)dino.timeNach=time;
@@ -37,21 +28,20 @@ public class Instinct {
                 humanCel=human;
                 break;
             }
-            else if(r1<=dino.rAttack*dino.rAttack&&human.sost!=Sost.EATING&&human.sost!=Sost.DEAD){
+            else if(r1<=dino.rAttack*dino.rAttack&&human.sost!=Sost.EATING){
                 dino.sost=Sost.ATTACKING;
                 humanCel=human;
                 dino.xNach=dino.x;
                 break;
             }
-            else if(r>r1&&human.sost!=Sost.EATING&&human.sost!=Sost.DEAD){
+            else if(r>r1&&human.sost!=Sost.EATING){
                 humanCel=human;
                 r=r1;
             }
         }
-        Log.d("simanok", "" +dino.sost);
+        if(dino.hp<=0)dino.sost=Sost.DEAD;
         //действуем
         if(dino.sost==Sost.LIVING){
-            Log.d("simanok", "in if" +dino);
             dino.walk(humanCel,timeNach,time);
         }
         else if(dino.sost==Sost.ATTACKING){

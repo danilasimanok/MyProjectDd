@@ -10,9 +10,9 @@ public class Shot {
     public int speed;
     private float sin,cos;
     public Paint paint=new Paint(0xffff0000);
-    public float x,y;
+    public float x,y,rad,xn,yn;
     public int dmg;
-    public Shot(float xc,float yc,float xtuk,float ytuk,int speed,int dmg){
+    public Shot(float xc,float yc,float xtuk,float ytuk,int speed,int dmg,float rad){
         this.speed=speed;
         float a,b;
         a=xtuk-xc;
@@ -21,7 +21,10 @@ public class Shot {
         this.cos=a/speed;
         this.x=xc;
         this.y=yc;
+        this.xn=xc;
+        this.yn=yc;
         this.dmg=dmg;
+        this.rad=rad;
     }
     public void draw(Canvas canvas){
         canvas.drawCircle(this.x,this.y,30,paint);
@@ -30,4 +33,7 @@ public class Shot {
         this.x+=this.speed*this.cos;
         this.y+=this.speed*this.sin;
     };
+    public boolean isInField(){
+        return this.rad*this.rad>=(this.x-this.xn)*(this.x-this.xn)+(this.y-this.yn)*(this.y-this.yn);
+    }
 }

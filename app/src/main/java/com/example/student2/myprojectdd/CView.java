@@ -48,6 +48,7 @@ public class CView extends View {
         delShots.clear();
         //персонажи решают
         for(Dino dino:dinos)dino.decide(humen,dino,1,1);
+        for(Human human:humen)human.decide(dinos,new Car());
         //рисуем персонажей
         for(Human human:humen)human.draw(canvas);
         for(Dino dino:dinos)dino.draw(canvas);
@@ -58,7 +59,7 @@ public class CView extends View {
         x=event.getX();
         y=event.getY();
         if((x-w/2)*(x-w/2)+(y-h)*(y-h)<=w*w/36.0){
-            newShots.add(new Shot(w/2,h,x,y,1,1));
+            newShots.add(new Shot(w/2,h,x,y,1,1,Math.max(w,h)));
         }
         return super.onTouchEvent(event);
     }
