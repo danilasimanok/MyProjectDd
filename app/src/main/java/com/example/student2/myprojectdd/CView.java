@@ -21,6 +21,9 @@ public class CView extends View {
     LinkedList<Shot> delShots=new LinkedList<Shot>();
     LinkedList<Dino> dinos=new LinkedList<Dino>();
     LinkedList<Human> humen=new LinkedList<Human>();
+    Car car;
+    boolean f=true;
+    Player player;
 
     public CView(Context context){
         super(context);
@@ -32,6 +35,7 @@ public class CView extends View {
         h=getHeight();
         //рисуем поле стрельбы
         canvas.drawCircle(w/2,h,w/6,paint);
+        player=new Player(w/2,h,new Rifle(w/2,h,true));
         //работаем со снарядами
         for(Shot shot:newShots){
             shots.add(shot);
@@ -40,7 +44,7 @@ public class CView extends View {
         for(Shot shot:shots){
             shot.move();
             shot.draw(canvas);
-            if(shot.y<=-10||shot.x<=-10||shot.x>=w+10)delShots.add(shot);
+            if(!shot.isInField())delShots.add(shot);
         }
         for(Shot shot:delShots){
             shots.remove(shot);
@@ -48,18 +52,24 @@ public class CView extends View {
         delShots.clear();
         //персонажи решают
         for(Dino dino:dinos)dino.decide(humen,dino,1,1);
-        for(Human human:humen)human.decide(dinos,new Car());
+        for(Human human:humen)if(human.getClass()!=Player.class)human.decide(dinos,car,newShots);
         //рисуем персонажей
         for(Human human:humen)human.draw(canvas);
         for(Dino dino:dinos)dino.draw(canvas);
+        if(car!=null)car.draw(canvas);
         invalidate();
     }
 
     public boolean onTouchEvent(MotionEvent event){
-        x=event.getX();
-        y=event.getY();
-        if((x-w/2)*(x-w/2)+(y-h)*(y-h)<=w*w/36.0){
-            newShots.add(new Shot(w/2,h,x,y,1,1,Math.max(w,h)));
+        if(f){
+            dinos.add(new Raptor(2,1,w/2,h/2));
+            humen.add(new HMishen(w/5,h/2));
+        }
+        else{
+            dinos.clear();
+            humen.clear();
+            dinos.add(new Raptor(2,1,w/2,h/3));
+            humen.add(new HMishen(w/5,h/2));
         }
         return super.onTouchEvent(event);
     }

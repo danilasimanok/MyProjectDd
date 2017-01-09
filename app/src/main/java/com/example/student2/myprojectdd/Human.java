@@ -20,8 +20,9 @@ public class Human {
     void move(Car car){
         if(this.x<car.x1)this.x+=this.speed;
         else this.x-=this.speed;
+        this.gun.x=this.x;
     };
-    void decide(LinkedList<Dino>dinos,Car car){this.intellect.decide(dinos,car,this);};
+    void decide(LinkedList<Dino>dinos,Car car,LinkedList<Shot>newShots){this.intellect.decide(dinos,car,this,newShots);};
     public void shut(Dino dinoCel,LinkedList<Shot>newShots){
         this.gun.shut(dinoCel,newShots);
     }

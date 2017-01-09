@@ -7,6 +7,7 @@ import java.util.LinkedList;
  */
 public abstract class Gun {
     public float x,y,speed,rad;
+    public int dmg,gotov,reload,rSpeed;
     abstract void shut(float xtuk, float ytuk, LinkedList<Shot>newShots);
     void shut(Dino dinoCel,LinkedList<Shot>newShots){shut(dinoCel.x,dinoCel.y,newShots);};
 }
